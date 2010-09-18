@@ -1,0 +1,40 @@
+
+Unicode Text Normalization(n11n) Filter for Solr.
+
+This filter works as CharFilter.
+Make jar file from sources and deploy to solr.
+
+Requirements:
+Solr 1.4 lib files.
+
+Usage:
+Insert jp.thinq.solr.normalization.NormalizeCharFilterFactory
+as CharFilter.
+This filter can have 'norm' parameter used for normalization form.
+It can accepts one of some values below:
+nfc: java.text.Normalizer.Form.NFC
+nfd: java.text.Normalizer.Form.NFD
+nfkc: java.text.Normalizer.Form.NFKC (default)
+nfkd: java.text.Normalizer.Form.NFKD
+
+e.g.)
+schema.xml:
+  <types>
+  ...
+   <fieldType name="text" class="solr.TextField">
+      <analyzer>
+        <charFilter class="solr.HTMLStripCharFilterFactory"/>
+        <charFilter class="jp.thinq.solr.normalization.NormalizeCharFilterFactory" norm="nfkc"/>
+        <tokenizer class="solr.CJKTokenizerFactory"/>
+      </analyzer>
+    </fieldType>
+  ...
+  </types>
+
+Bugs:
+Only nfkc normalization is tested. :-)
+This filter reads all characters before processing. It can cause large memory usage.
+Streaming reading is planned...
+
+Author: Shinsaku C. <chsh@thinq.jp>
+Licence: MIT.
